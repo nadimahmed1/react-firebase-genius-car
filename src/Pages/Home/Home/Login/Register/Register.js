@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Register.css'
-import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth'
+import { useCreateUserWithEmailAndPassword, useUpdateProfile } from 'react-firebase-hooks/auth'
 import auth from '../../../../../firebase.init';
 import SocialLogin from '../SocialLogin/SocialLogin';
 
@@ -11,29 +11,29 @@ const Register = () => {
     const [agree, setAgree] = useState(false);
     const navigate = useNavigate()
 
+    const [updateProfile, updating, NameError] = useUpdateProfile(auth);
+
     const [
         createUserWithEmailAndPassword,
         user,
         loading,
         error,
-    ] = useCreateUserWithEmailAndPassword(auth);
+    ] = useCreateUserWithEmailAndPassword(auth, { sendEmailVerification: true });
 
 
-    const handleSubmit = event => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const name = event.target.name.value;
         const email = event.target.email.value;
         const password = event.target.password.value;
 
-        if (agree) {
-            createUserWithEmailAndPassword(email, password)
-        }
 
-    }
-
-    if (user) {
+        await createUserWithEmailAndPassword(email, password);
+        await updateProfile({ displayName: name });
+        console.log('Updated profile');
         navigate('/home')
     }
+
 
     const navigateToLogin = () => {
         navigate('/login')

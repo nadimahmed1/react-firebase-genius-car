@@ -5,11 +5,16 @@ import facebookIcon from '../../../../../images/download-removebg-preview.png'
 import { useSignInWithGithub, useSignInWithGoogle } from 'react-firebase-hooks/auth';
 import auth from '../../../../../firebase.init';
 import { useNavigate } from 'react-router-dom';
+import Loading from '../../../../Share/Loading/Loading';
 const SocialLogin = () => {
     const navigate = useNavigate();
     const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
 
     const [signInWithGithub, GithubUser, GithubLoading, GithubError] = useSignInWithGithub(auth);
+
+    if (GithubLoading) {
+        return <Loading></Loading>
+    }
 
     let errorElement;
 
