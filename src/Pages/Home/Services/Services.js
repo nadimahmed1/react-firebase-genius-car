@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
-import useUsers from '../../../Hooks/useUsers';
 import Service from './Service/Service';
 import './Services.css'
 
 const Services = () => {
-    const services = useUsers('services.json');
+    const [services, setServices] = useState([]);
+
+    useEffect(() => {
+        fetch('http://localhost:5000/server')
+            .then(res => res.json())
+            .then(data => setServices(data))
+    }, [])
 
     return (
         <div id='Services' className='Services'>
@@ -13,7 +18,7 @@ const Services = () => {
             <div className="services-container">
                 {
                     services.map(serv => <Service
-                        key={serv.id}
+                        key={serv._id}
                         serv={serv}
                     ></Service>)
                 }

@@ -4,11 +4,11 @@ const useUsers = (url) => {
     const [services, setServices] = useState([]);
 
     useEffect(() => {
-        fetch(url)
+        fetch('http://localhost:5000/server')
             .then(res => res.json())
             .then(data => setServices(data))
     }, [])
-    return services;
+    return [services, setServices]
 };
 
 export default useUsers;

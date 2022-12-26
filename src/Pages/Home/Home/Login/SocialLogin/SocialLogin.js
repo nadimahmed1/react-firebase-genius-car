@@ -12,7 +12,7 @@ const SocialLogin = () => {
 
     const [signInWithGithub, GithubUser, GithubLoading, GithubError] = useSignInWithGithub(auth);
 
-    if (GithubLoading) {
+    if (GithubLoading || loading) {
         return <Loading></Loading>
     }
 

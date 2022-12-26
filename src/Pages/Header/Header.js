@@ -29,6 +29,13 @@ function CollapsibleExample() {
                     </Nav>
                     <Nav>
                         <Nav.Link as={Link} to="/about">About</Nav.Link>
+
+                        {
+                            user && <>
+                                <Nav.Link as={Link} to="adduser">Add User</Nav.Link>
+                                <Nav.Link as={Link} to="manage">Manage Services</Nav.Link>
+                            </>
+                        }
                         {
 
                             user ?
