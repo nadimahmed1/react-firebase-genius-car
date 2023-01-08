@@ -4,9 +4,10 @@ import { useSendPasswordResetEmail, useSignInWithEmailAndPassword, } from 'react
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import auth from '../../../../../firebase.init';
 import SocialLogin from '../SocialLogin/SocialLogin';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
 
 
 
@@ -23,13 +24,17 @@ const Login = () => {
         error,
     ] = useSignInWithEmailAndPassword(auth);
 
-    const handleSubmit = event => {
+    const handleSubmit = async event => {
         event.preventDefault();
         const email = emailRef.current.value;
         const password = passwordRef.current.value;
         console.log(email, password);
 
-        signInWithEmailAndPassword(email, password)
+        await signInWithEmailAndPassword(email, password);
+        const { data } = await axios.post('http://localhost:5000/login', { email });
+        console.log(data);
+        localStorage.setItem('accessToken', data.accessToken);
+        navigate(from, { replace: true });
     }
 
     const [sendPasswordResetEmail, sending, ResetError] = useSendPasswordResetEmail(auth);
@@ -50,7 +55,7 @@ const Login = () => {
     }
 
     if (user) {
-        navigate(from, { replace: true });
+
     }
 
 
@@ -71,7 +76,7 @@ const Login = () => {
                     Login
                 </Button>
             </Form>
-            <ToastContainer></ToastContainer>
+
             <p>New to Genius Car? <Link to={'/register'} onClick={navigateRegister} className='text-decoration-none text-primary'>Please Register</Link></p>
             <p>forget password? <button onClick={handleResetPassword} className='text-decoration-none btn btn-link'>Reset Password</button></p>
             <SocialLogin></SocialLogin>
